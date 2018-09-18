@@ -87,25 +87,41 @@ function runQuery(numSearch, queryURL) {
 
       var displayVideo = $("<div>");
       displayVideo.attr("id","player-"+i);
+      displayVideo.addClass("m-2");
 
       var displayVideo1 = $("<div>");
       displayVideo1.attr("id","player1-"+i);
+      displayVideo1.addClass("m-2");
 
       var displayVideo2 = $("<div>");
       displayVideo2.attr("id","player2-"+i);
-      
+      displayVideo2.addClass("m-2");
 
+      // var displayVideo3 = $("<div>");
+      // displayVideo3.attr("id","player3-"+i);
+      // displayVideo3.addClass("m-2");
+
+      var videoSection = $("<div>");
+      videoSection.attr("id", "videoSection-" + i);
+      videoSection.append(displayVideo);
+      videoSection.append(displayVideo1);
+      videoSection.append(displayVideo2);
+      // videoSection.append(displayVideo3);
+
+      //instruction Button
       var instructionBtn = $("<button>");
       instructionBtn.attr("src", element.url);
       instructionBtn.text("See Instructions");
-      instructionBtn.addClass("instructionBtn w-25");
+      instructionBtn.addClass("instructionBtn w-25 m-3");
 
+      //Youtube video Button
       var youtubeBtn = $("<button>");
       youtubeBtn.attr("name", element.label);
       youtubeBtn.attr("index", i);
-      youtubeBtn.text("Show sample videos");
-      youtubeBtn.addClass("videoBtn w-25");
+      youtubeBtn.text("Show Sample Videos");
+      youtubeBtn.addClass("videoBtn w-25 m-3");
 
+      //Save to collection Button
       var saveBtn = $("<button>");
       saveBtn.attr("data-title", element.label);
       saveBtn.attr("data-image", element.image);
@@ -115,7 +131,14 @@ function runQuery(numSearch, queryURL) {
       saveBtn.attr("data-healthLabel", element.healthLabels);
       saveBtn.attr("data-url", element.url);
       saveBtn.text("Save to Collections");
-      saveBtn.addClass("saveBtn w-25");
+      saveBtn.addClass("saveBtn w-25 m-3");
+
+      //Buttons Container for the above three buttons
+      var buttonSection = $("<div>");
+      buttonSection.attr("id", "buttonSection-" + i);
+      buttonSection.append(instructionBtn);
+      buttonSection.append(youtubeBtn);
+      buttonSection.append(saveBtn);
 
       $("#displayResults").append(displaySection);
 
@@ -140,12 +163,9 @@ function runQuery(numSearch, queryURL) {
       $("#recipe-" + i).append(
         "<h5> Total Calories/person: " + calories + "</h5>"
       );
-      $("#recipe-" + i).append(instructionBtn);
-      $("#recipe-" + i).append(youtubeBtn);
-      $("#recipe-" + i).append(saveBtn);
-      $("#recipe-" + i).append(displayVideo);
-      $("#recipe-" + i).append(displayVideo1);
-      $("#recipe-" + i).append(displayVideo2);
+      $("#recipe-" + i).append(buttonSection);
+      $("#recipe-" + i).append(videoSection);
+      
     });
   });
 }
@@ -225,8 +245,8 @@ $(document).on("click", ".videoBtn", function() {
 
       function onYouTubeIframeAPIReady() {
         player = new YT.Player("player-"+index, {
-          height: "290",
-          width: "540",
+          height: "150",
+          width: "300", 
           videoId: videoIdArray[0],
           events: {
             'onReady': onPlayerReady
@@ -237,8 +257,8 @@ $(document).on("click", ".videoBtn", function() {
 
       function onYouTubeIframeAPIReady1() {
         player1 = new YT.Player("player1-"+index, {
-          height: "290",
-          width: "540",
+          height: "150",
+          width: "300",
           videoId: videoIdArray[1],
           events: {
             'onReady': onPlayerReady
@@ -248,14 +268,25 @@ $(document).on("click", ".videoBtn", function() {
 
       function onYouTubeIframeAPIReady2() {
         player2 = new YT.Player("player2-"+index, {
-          height: "290",
-          width: "540",
+          height: "150",
+          width: "300",
           videoId: videoIdArray[2],
           events: {
             'onReady': onPlayerReady
           }
         });
       }
+
+      // function onYouTubeIframeAPIReady3() {
+      //   player3 = new YT.Player("player3-"+index, {
+      //     height: "150",
+      //     width: "300",
+      //     videoId: videoIdArray[3],
+      //     events: {
+      //       'onReady': onPlayerReady
+      //     }
+      //   });
+      // }
 
       // The API will call this function when the video player is ready.
       var done = false;
@@ -269,8 +300,10 @@ $(document).on("click", ".videoBtn", function() {
       onYouTubeIframeAPIReady();
       onYouTubeIframeAPIReady1();
       onYouTubeIframeAPIReady2();
+      // onYouTubeIframeAPIReady3()
     })
     .fail(function(err) {
       throw err;
     });
+
 });
