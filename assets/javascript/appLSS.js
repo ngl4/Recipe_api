@@ -1,3 +1,8 @@
+
+var array = JSON.parse(localStorage.getItem("searchItems"));
+console.log(array);
+console.log("First item:" + array[0], "Second item:" + array[1], "Third item:" + array[2]);
+
 //api key
 
 var apiKey = "ad9411943fc77cb3dcb9f5c1f72654de";
@@ -33,6 +38,20 @@ var queryURLBase =
 
 //track number of recipe
 recipeCounter = 0;
+
+
+
+searchTerm =  array[0];
+
+numTime = parseInt(array[1]);
+
+numResults = array[2];
+
+var newURL = queryURLBase + "&q=" + searchTerm;
+
+runQuery(parseInt(numResults), newURL);
+
+
 
 function runQuery(numSearch, queryURL) {
   $.ajax({
@@ -77,7 +96,6 @@ function runQuery(numSearch, queryURL) {
     }
 
     chosenSearch.slice(0, numSearch).forEach(function(element, i) {
-
       var calories = Math.round(element.calories / element.yield);
 
       var displaySection = $("<div>");
@@ -85,15 +103,15 @@ function runQuery(numSearch, queryURL) {
       displaySection.addClass("card p-3 m-2 verticalList");
 
       var displayVideo = $("<div>");
-      displayVideo.attr("id","player-"+i);
+      displayVideo.attr("id", "player-" + i);
       displayVideo.addClass("m-2");
 
       var displayVideo1 = $("<div>");
-      displayVideo1.attr("id","player1-"+i);
+      displayVideo1.attr("id", "player1-" + i);
       displayVideo1.addClass("m-2");
 
       var displayVideo2 = $("<div>");
-      displayVideo2.attr("id","player2-"+i);
+      displayVideo2.attr("id", "player2-" + i);
       displayVideo2.addClass("m-2");
 
       // var displayVideo3 = $("<div>");
@@ -164,28 +182,10 @@ function runQuery(numSearch, queryURL) {
       );
       $("#recipe-" + i).append(buttonSection);
       $("#recipe-" + i).append(videoSection);
-      
     });
   });
 }
 
-$("#searchBtn").on("click", function() {
-  chosenSearch = [];
-
-  searchTerm = $("#searchTerm")
-    .val()
-    .trim();
-
-  numResults = $("#numResults").val();
-
-  numTime = $("#numTime").val();
-
-  var newURL = queryURLBase + "&q=" + searchTerm;
-
-  runQuery(parseInt(numResults), newURL);
-
-  return false;
-});
 
 $(document).on("click", ".instructionBtn", function() {
   var url = $(this).attr("src");
@@ -226,52 +226,47 @@ $(document).on("click", ".videoBtn", function() {
     "https://www.googleapis.com/youtube/v3/search?q=" +
     name +
     "&part=snippet&key=AIzaSyAcwzTei_3ijB48GQzlph93ht_rExhGKM4";
-    
+
   $.ajax({
     url: queryURL,
     method: "GET"
   })
     .done(function(result) {
-
-
       result.items.forEach(function(element) {
-
         videoIdArray.push(element.id.videoId);
-
       });
 
       console.log(videoIdArray);
 
       function onYouTubeIframeAPIReady() {
-        player = new YT.Player("player-"+index, {
+        player = new YT.Player("player-" + index, {
           height: "150",
-          width: "300", 
+          width: "300",
           videoId: videoIdArray[0],
           events: {
-            'onReady': onPlayerReady
+            onReady: onPlayerReady
           }
         });
-        
       }
 
       function onYouTubeIframeAPIReady1() {
-        player1 = new YT.Player("player1-"+index, {
+        player1 = new YT.Player("player1-" + index, {
           height: "150",
           width: "300",
           videoId: videoIdArray[1],
           events: {
-            'onReady': onPlayerReady
+            onReady: onPlayerReady
           }
         });
       }
 
       function onYouTubeIframeAPIReady2() {
-        player2 = new YT.Player("player2-"+index, {
+        player2 = new YT.Player("player2-" + index, {
           height: "150",
           width: "300",
           videoId: videoIdArray[2],
           events: {
-            'onReady': onPlayerReady
+            onReady: onPlayerReady
           }
         });
       }
@@ -304,5 +299,4 @@ $(document).on("click", ".videoBtn", function() {
     .fail(function(err) {
       throw err;
     });
-
 });

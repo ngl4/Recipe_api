@@ -77,7 +77,6 @@ function runQuery(numSearch, queryURL) {
     }
 
     chosenSearch.slice(0, numSearch).forEach(function(element, i) {
-
       var calories = Math.round(element.calories / element.yield);
 
       var displaySection = $("<div>");
@@ -85,15 +84,15 @@ function runQuery(numSearch, queryURL) {
       displaySection.addClass("card p-3 m-2 verticalList");
 
       var displayVideo = $("<div>");
-      displayVideo.attr("id","player-"+i);
+      displayVideo.attr("id", "player-" + i);
       displayVideo.addClass("m-2");
 
       var displayVideo1 = $("<div>");
-      displayVideo1.attr("id","player1-"+i);
+      displayVideo1.attr("id", "player1-" + i);
       displayVideo1.addClass("m-2");
 
       var displayVideo2 = $("<div>");
-      displayVideo2.attr("id","player2-"+i);
+      displayVideo2.attr("id", "player2-" + i);
       displayVideo2.addClass("m-2");
 
       // var displayVideo3 = $("<div>");
@@ -164,10 +163,10 @@ function runQuery(numSearch, queryURL) {
       );
       $("#recipe-" + i).append(buttonSection);
       $("#recipe-" + i).append(videoSection);
-      
     });
   });
 }
+var searchItems = [];
 
 $("#searchBtn").on("click", function() {
   chosenSearch = [];
@@ -176,15 +175,23 @@ $("#searchBtn").on("click", function() {
     .val()
     .trim();
 
-  numResults = $("#numResults").val();
+  searchItems.push(searchTerm);
 
   numTime = $("#numTime").val();
+
+  searchItems.push(numTime);
+
+  numResults = $("#numResults").val();
+
+  searchItems.push(numResults);
+
+  localStorage.setItem("searchItems", JSON.stringify(searchItems));
 
   var newURL = queryURLBase + "&q=" + searchTerm;
 
   runQuery(parseInt(numResults), newURL);
 
-  return false;
+  return true;
 });
 
 $(document).on("click", ".instructionBtn", function() {
@@ -226,52 +233,47 @@ $(document).on("click", ".videoBtn", function() {
     "https://www.googleapis.com/youtube/v3/search?q=" +
     name +
     "&part=snippet&key=AIzaSyAcwzTei_3ijB48GQzlph93ht_rExhGKM4";
-    
+
   $.ajax({
     url: queryURL,
     method: "GET"
   })
     .done(function(result) {
-
-
       result.items.forEach(function(element) {
-
         videoIdArray.push(element.id.videoId);
-
       });
 
       console.log(videoIdArray);
 
       function onYouTubeIframeAPIReady() {
-        player = new YT.Player("player-"+index, {
+        player = new YT.Player("player-" + index, {
           height: "150",
-          width: "300", 
+          width: "300",
           videoId: videoIdArray[0],
           events: {
-            'onReady': onPlayerReady
+            onReady: onPlayerReady
           }
         });
-        
       }
 
       function onYouTubeIframeAPIReady1() {
-        player1 = new YT.Player("player1-"+index, {
+        player1 = new YT.Player("player1-" + index, {
           height: "150",
           width: "300",
           videoId: videoIdArray[1],
           events: {
-            'onReady': onPlayerReady
+            onReady: onPlayerReady
           }
         });
       }
 
       function onYouTubeIframeAPIReady2() {
-        player2 = new YT.Player("player2-"+index, {
+        player2 = new YT.Player("player2-" + index, {
           height: "150",
           width: "300",
           videoId: videoIdArray[2],
           events: {
-            'onReady': onPlayerReady
+            onReady: onPlayerReady
           }
         });
       }
@@ -304,5 +306,4 @@ $(document).on("click", ".videoBtn", function() {
     .fail(function(err) {
       throw err;
     });
-
 });
